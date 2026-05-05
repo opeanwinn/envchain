@@ -1,9 +1,13 @@
-/**
- * envchain — public API barrel export
- */
-
-export { envchain } from './envchain';
-export { field } from './field';
-export { validators, ValidationError } from './validators';
-export type { ValidatorFn } from './validators';
-export type { FieldOptions } from './field';
+export { envchain } from "./envchain";
+export { field } from "./field";
+export { transformer } from "./transformer";
+export * from "./validators";
+export {
+  parseString,
+  parseNumber,
+  parseInteger,
+  parseBoolean,
+  parseJson,
+  parseEnum,
+} from "./parser";
+export type { ParseResult } from "./parser";
