@@ -20,3 +20,12 @@ export {
   isOneOf,
   isArrayOf,
 } from './typeGuards';
+export type {
+  EnvchainOptions,
+  EnvchainResult,
+  FieldDefinition,
+  FieldPipeline,
+  Pipeline,
+  OptionalField,
+  RequiredField,
+} from './types';
