@@ -27,6 +27,13 @@ describe("deepFreeze", () => {
       (obj as Record<string, string>).PORT = "4000";
     }).toThrow();
   });
+
+  it("prevents adding new properties", () => {
+    const obj = deepFreeze({ PORT: "3000" });
+    expect(() => {
+      (obj as Record<string, string>).NEW_KEY = "value";
+    }).toThrow();
+  });
 });
 
 describe("sealEnv", () => {
@@ -42,6 +49,13 @@ describe("sealEnv", () => {
       obj.PORT = "4000";
     }).not.toThrow();
     expect(obj.PORT).toBe("4000");
+  });
+
+  it("prevents adding new properties when sealed", () => {
+    const obj = sealEnv({ PORT: "3000" });
+    expect(() => {
+      (obj as Record<string, string>).NEW_KEY = "value";
+    }).toThrow();
   });
 });
 
@@ -76,6 +90,10 @@ describe("isFrozen / isSealed", () => {
 
   it("returns true for sealed objects", () => {
     expect(isSealed(Object.seal({}))).toBe(true);
+  });
+
+  it("returns false for plain objects (isSealed)", () => {
+    expect(isSealed({})).toBe(false);
   });
 });
 
