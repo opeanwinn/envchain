@@ -48,8 +48,27 @@ export function createErrorCollector(): ErrorCollector {
   };
 }
 
+/**
+ * Throws an error with a formatted report if the collector contains any errors.
+ * The thrown error includes all collected validation messages in a readable format.
+ */
 export function throwIfErrors(collector: ErrorCollector): void {
   if (collector.hasErrors()) {
     throw new Error(collector.getReport().toString());
+  }
+}
+
+/**
+ * Merges errors from one or more source collectors into a target collector.
+ * Useful for combining results from parallel or nested parsing operations.
+ */
+export function mergeCollectors(
+  target: ErrorCollector,
+  ...sources: ErrorCollector[]
+): void {
+  for (const source of sources) {
+    for (const error of source.getErrors()) {
+      target.addRaw(error);
+    }
   }
 }
