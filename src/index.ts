@@ -28,4 +28,7 @@ export type {
   Pipeline,
   OptionalField,
   RequiredField,
+  // Parser-related types
+  ParseResult,
+  ParserFn,
 } from './types';
