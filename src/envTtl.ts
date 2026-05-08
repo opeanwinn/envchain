@@ -22,6 +22,9 @@ export function setWithTtl(
   value: string,
   ttlMs: number
 ): void {
+  if (ttlMs <= 0) {
+    throw new RangeError(`ttlMs must be a positive number, got ${ttlMs}`);
+  }
   registry.entries.set(key, {
     value,
     expiresAt: Date.now() + ttlMs,
@@ -74,4 +77,15 @@ export function snapshotTtlRegistry(
 
 export function clearTtlRegistry(registry: TtlRegistry): void {
   registry.entries.clear();
+}
+
+/**
+ * Returns the remaining TTL in milliseconds for the given key,
+ * or -1 if the key does not exist or has already expired.
+ */
+export function getRemainingTtl(registry: TtlRegistry, key: string): number {
+  const entry = registry.entries.get(key);
+  if (!entry) return -1;
+  const remaining = entry.expiresAt - Date.now();
+  return remaining > 0 ? remaining : -1;
 }
