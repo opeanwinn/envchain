@@ -22,6 +22,11 @@ const DEFAULT_OPTIONS: RetryOptions = {
   backoff: "linear",
 };
 
+/**
+ * Computes the delay for a given attempt number based on the backoff strategy.
+ * - "exponential": delay doubles each attempt (base * 2^(attempt-1))
+ * - "linear": delay increases linearly (base * attempt)
+ */
 function computeDelay(base: number, attempt: number, backoff: RetryOptions["backoff"]): number {
   if (backoff === "exponential") {
     return base * Math.pow(2, attempt - 1);
@@ -66,4 +71,16 @@ export function withRetryFallback<T>(
     }
   }
   return fallback;
+}
+
+/**
+ * Wraps an async function so that it automatically retries on failure
+ * using the provided retry options. Returns a new function with the
+ * same signature that applies retry logic transparently.
+ */
+export function withRetry<T>(
+  fn: () => Promise<T>,
+  options: Partial<RetryOptions> = {}
+): () => Promise<T> {
+  return () => retryAsync(fn, options).then((result) => result.value);
 }
